@@ -1,20 +1,26 @@
-// Path: src/server.js
 //CommonJs => utiliza o require (pouco utilizad)
 import http from 'node:http';
 //ESModules =: import/export (modelo mais utilizado, porém, o node não suporta, para poder utilizar, deve-se adicionar
 // "type": "module", ao package.json
-
+const users = [];
 const routes = {
     GET: {
         '/': (req, res) => {
             return res.end('Hello World')
         },
         '/users': (req, res) => {
-            return res.end('Listagem de usuários')
+            return res
+                .setHeader('Content-type','application/json')
+                .end(JSON.stringify(users))
         }
     },
     POST: {
         '/users': (req, res) => {
+            users.push({
+                "id": "1",
+                "name": "João",
+                "email": "joao@email.com"
+            });
             return res.end('Criar usuário')
         }
     }
@@ -22,8 +28,8 @@ const routes = {
 
 
 const server = http.createServer((req, res) => {
-    const { method, url } = req;
-    console.log(method)
+    const {method, url} = req;
+
     // Verifica se o método existe nas rotas
     if (routes[method]) {
         const handler = routes[method][url];
@@ -41,5 +47,3 @@ const server = http.createServer((req, res) => {
 server.listen(3333);
 console.log('Servidor iniciado na porta 3333');
 
-// Para rodar o servidor, basta abrir o terminal e digitar: node src/server.js
-// Para parar o servidor, basta apertar o Ctrl + C no terminal
