@@ -11,6 +11,7 @@ const routes = {
         '/users': (req, res) => {
             return res
                 .setHeader('Content-type','application/json')
+                .writeHead(200)
                 .end(JSON.stringify(users))
         }
     },
@@ -21,7 +22,10 @@ const routes = {
                 "name": "João",
                 "email": "joao@email.com"
             });
-            return res.end('Criar usuário')
+            return res
+                .setHeader('Content-type','application/json')
+                .writeHead(200)
+                .end('Criar usuário')
         }
     }
 };
@@ -37,10 +41,15 @@ const server = http.createServer((req, res) => {
         if (handler) {
             handler(req, res);
         } else {
-            res.end('Rota não encontrada');
+            res
+                .setHeader('Content-type','application/json')
+                .writeHead(404)
+                .end('Rota não encontrada');
         }
     } else {
-        res.end('Método não permitido');
+        res
+            .setHeader('Content-type','application/json')
+            .end('Método não permitido');
     }
 });
 
